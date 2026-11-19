@@ -14,7 +14,7 @@ data class WarpConfig(
     fun location(): Location {
         val parts = location.split(",")
         val world = Bukkit.getWorld(parts[0])
-            ?: throw IllegalArgumentException("World ${parts[0]} does not exist.")
+            ?: error("World '${parts[0]}' not found for warp '$name'.")
         val x = parts[1].toDouble()
         val y = parts[2].toDouble()
         val z = parts[3].toDouble()
