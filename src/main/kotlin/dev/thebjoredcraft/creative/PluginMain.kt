@@ -3,6 +3,7 @@ package dev.thebjoredcraft.creative
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.thebjoredcraft.creative.command.ClearCommand
 import dev.thebjoredcraft.creative.command.GameModeCommand
+import dev.thebjoredcraft.creative.warps.config.WarpConfigManager
 import org.bukkit.plugin.java.JavaPlugin
 
 val plugin get() = JavaPlugin.getPlugin(PluginMain::class.java)
@@ -13,5 +14,11 @@ class PluginMain : SuspendingJavaPlugin() {
     override suspend fun onEnableAsync() {
         GameModeCommand.register()
         ClearCommand.register()
+
+        WarpConfigManager.loadAll()
+    }
+
+    override suspend fun onDisableAsync() {
+        WarpConfigManager.saveAll()
     }
 }
