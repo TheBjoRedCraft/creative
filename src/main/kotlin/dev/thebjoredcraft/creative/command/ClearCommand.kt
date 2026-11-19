@@ -7,7 +7,6 @@ import io.papermc.paper.command.brigadier.Commands
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
-import org.bukkit.GameMode
 import org.bukkit.entity.Player
 
 object ClearCommand {
@@ -15,6 +14,7 @@ object ClearCommand {
         plugin.lifecycleManager.registerEventHandler(LifecycleEvents.COMMANDS) { event ->
             event.registrar().register(
                 Commands.literal("clear")
+                    .requires { it.sender.hasPermission("creative.clear") }
                     .executes {
                         val player = it.source.sender as? Player
 
@@ -30,16 +30,22 @@ object ClearCommand {
                         player.sendRichMessage("$PREFIX Cleared $COLOR$items <white>item(s) from your inventory.")
                         1
                     }
-                    .then(Commands.argument("players", ArgumentTypes.players()).executes {
-                        val players =
-                            it.getArgument("players", PlayerSelectorArgumentResolver::class.java)
-                                .resolve(it.source)
+                    .then(
+                        Commands.argument("players", ArgumentTypes.players())
+                            .requires { it.sender.hasPermission("creative.clear.others") }
+                            .executes {
+                                val players =
+                                    it.getArgument(
+                                        "players",
+                                        PlayerSelectorArgumentResolver::class.java
+                                    )
+                                        .resolve(it.source)
 
-                        players.forEach { player -> player.inventory.clear() }
+                                players.forEach { player -> player.inventory.clear() }
 
-                        it.source.sender.sendRichMessage("$PREFIX Cleared the inventory of $COLOR${players.size} <white>player(s).")
-                        1
-                    })
+                                it.source.sender.sendRichMessage("$PREFIX Cleared the inventory of $COLOR${players.size} <white>player(s).")
+                                1
+                            })
                     .build()
             )
         }

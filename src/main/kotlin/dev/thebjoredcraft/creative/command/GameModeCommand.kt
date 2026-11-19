@@ -15,6 +15,7 @@ object GameModeCommand {
         plugin.lifecycleManager.registerEventHandler(LifecycleEvents.COMMANDS) { event ->
             event.registrar().register(
                 Commands.literal("gamemode")
+                    .requires { it.sender.hasPermission("creative.gamemode") }
                     .then(Commands.argument("gamemode", ArgumentTypes.gameMode()).executes {
                         val player = it.source.sender as? Player
 
@@ -29,17 +30,23 @@ object GameModeCommand {
                         player.sendRichMessage("$PREFIX Your gamemode has been updated to $COLOR<lang:${gamemode.translationKey()}><white>.")
                         1
                     })
-                    .then(Commands.argument("players", ArgumentTypes.players()).executes {
-                        val players =
-                            it.getArgument("players", PlayerSelectorArgumentResolver::class.java)
-                                .resolve(it.source)
-                        val gamemode = it.getArgument("gamemode", GameMode::class.java)
+                    .then(
+                        Commands.argument("players", ArgumentTypes.players())
+                            .requires { it.sender.hasPermission("creative.clear.others") }
+                            .executes {
+                                val players =
+                                    it.getArgument(
+                                        "players",
+                                        PlayerSelectorArgumentResolver::class.java
+                                    )
+                                        .resolve(it.source)
+                                val gamemode = it.getArgument("gamemode", GameMode::class.java)
 
-                        players.forEach { player -> player.gameMode = gamemode }
+                                players.forEach { player -> player.gameMode = gamemode }
 
-                        it.source.sender.sendRichMessage("$PREFIX Updated the gamemode of $COLOR${players.size} <white>player(s) to $COLOR<lang:${gamemode.translationKey()}><white>.")
-                        1
-                    })
+                                it.source.sender.sendRichMessage("$PREFIX Updated the gamemode of $COLOR${players.size} <white>player(s) to $COLOR<lang:${gamemode.translationKey()}><white>.")
+                                1
+                            })
                     .build(),
                 listOf("gm")
             )
