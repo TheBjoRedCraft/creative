@@ -67,7 +67,7 @@ object WarpCommand {
                     .requires { it.sender.hasPermission("creative.warps.delete") }
                     .then(
                         Commands.argument("name", StringArgumentType.word())
-                            .suggests { context, builder ->
+                            .suggests { _, builder ->
                                 WarpRegistry.all().forEach { warp -> builder.suggest(warp.name) }
                                 builder.buildFuture()
                             }.executes {
@@ -86,7 +86,7 @@ object WarpCommand {
                     .requires { it.sender.hasPermission("creative.warps.teleport") }
                     .then(
                         Commands.argument("name", StringArgumentType.word())
-                            .suggests { context, builder ->
+                            .suggests { _, builder ->
                                 WarpRegistry.all().forEach { warp -> builder.suggest(warp.name) }
                                 builder.buildFuture()
                             }.executes {
