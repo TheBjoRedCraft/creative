@@ -27,7 +27,7 @@ object GameModeCommand {
                         val gamemode = it.getArgument("gamemode", GameMode::class.java)
 
                         player.gameMode = gamemode
-                        player.sendRichMessage("$PREFIX Your gamemode has been updated to $COLOR<lang:${gamemode.translationKey()}><white>.")
+                        player.sendRichMessage("$PREFIX Set own gamemode to $COLOR<lang:${gamemode.translationKey()}><white>.")
                         1
                     })
                     .then(
