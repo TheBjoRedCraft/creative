@@ -18,9 +18,11 @@ object WarpConfigManager {
         configManager.value.warps.forEach {
             WarpRegistry.register(it.name, it.location(), it.creator)
         }
+
+        plugin.logger.info("Loaded ${WarpRegistry.all().size} warps")
     }
 
-    fun saveAll() {
+    fun saveAll(log: Boolean = false) {
         val localWarps = WarpRegistry.all().map { WarpConfig.of(it) }
 
         configManager.update {
@@ -28,5 +30,9 @@ object WarpConfigManager {
         }
 
         configManager.save()
+
+        if (log) {
+            plugin.logger.info("Saved ${localWarps.size} warps")
+        }
     }
 }

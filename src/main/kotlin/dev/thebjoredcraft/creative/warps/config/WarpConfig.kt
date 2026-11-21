@@ -7,9 +7,9 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable
 
 @ConfigSerializable
 data class WarpConfig(
-    val name: String,
-    val location: String,
-    val creator: String
+    val name: String = "UNINITIALIZED",
+    val location: String = "UNINITIALIZED",
+    val creator: String = "UNINITIALIZED"
 ) {
     fun location(): Location {
         val parts = location.split(",")

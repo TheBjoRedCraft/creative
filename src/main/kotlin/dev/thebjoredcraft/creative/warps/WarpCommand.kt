@@ -5,9 +5,11 @@ import dev.thebjoredcraft.creative.COLOR
 import dev.thebjoredcraft.creative.PREFIX
 import dev.thebjoredcraft.creative.miniMessage
 import dev.thebjoredcraft.creative.plugin
+import dev.thebjoredcraft.creative.warps.config.WarpConfigManager
 import io.papermc.paper.command.brigadier.Commands
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
 import net.kyori.adventure.sound.Sound
+import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 
 object WarpCommand {
@@ -57,6 +59,7 @@ object WarpCommand {
                             }
 
                             WarpRegistry.register(name, location, player.name)
+                            WarpConfigManager.saveAll()
 
                             it.source.sender.sendRichMessage("$PREFIX Created warp $COLOR$name <white>at your current location.")
                             1
@@ -76,6 +79,7 @@ object WarpCommand {
                                 val name = it.getArgument("name", String::class.java)
 
                                 WarpRegistry.unregister(name)
+                                WarpConfigManager.saveAll()
 
                                 it.source.sender.sendRichMessage("$PREFIX Deleted warp $COLOR$name<white>.")
                                 1
@@ -107,9 +111,10 @@ object WarpCommand {
                                     return@executes 1
                                 }
 
-                                it.source.sender.sendActionBar(miniMessage.deserialize("$PREFIX Teleporting to warp $COLOR$name<white>..."))
+                                it.source.sender.sendActionBar(miniMessage.deserialize("Teleporting to warp $COLOR$name<white>..."))
 
                                 player.teleportAsync(warp.location).thenRun {
+                                    it.source.sender.sendActionBar(Component.empty())
                                     it.source.sender.sendRichMessage("$PREFIX Teleported to warp $COLOR$name<white>.")
                                     it.source.sender.playSound(
                                         Sound.sound(

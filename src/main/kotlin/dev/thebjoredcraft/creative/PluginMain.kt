@@ -36,6 +36,6 @@ class PluginMain : SuspendingJavaPlugin() {
     }
 
     override suspend fun onDisableAsync() {
-        WarpConfigManager.saveAll()
+        WarpConfigManager.saveAll(true)
     }
 }
