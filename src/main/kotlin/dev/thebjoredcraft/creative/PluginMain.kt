@@ -3,16 +3,20 @@ package dev.thebjoredcraft.creative
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.thebjoredcraft.creative.command.ClearCommand
 import dev.thebjoredcraft.creative.command.GameModeCommand
+import dev.thebjoredcraft.creative.listener.AsyncChatListener
 import dev.thebjoredcraft.creative.listener.BlockUpdateListener
 import dev.thebjoredcraft.creative.listener.TabSuggestionListener
 import dev.thebjoredcraft.creative.listener.WhitelistListener
 import dev.thebjoredcraft.creative.warps.config.WarpConfigManager
+import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
 val plugin get() = JavaPlugin.getPlugin(PluginMain::class.java)
-const val COLOR = "<#6eff94>"
-const val PREFIX = "<dark_gray>»$COLOR Creative <dark_gray>|<white>"
+
+val TEXT_COLOR = TextColor.fromHexString("#6eff94")
+val COLOR = "<${TEXT_COLOR?.asHexString()}>"
+val PREFIX = "<dark_gray>»$COLOR Creative <dark_gray>|<white>"
 
 class PluginMain : SuspendingJavaPlugin() {
     override suspend fun onEnableAsync() {
@@ -22,6 +26,7 @@ class PluginMain : SuspendingJavaPlugin() {
         Bukkit.getPluginManager().registerEvents(BlockUpdateListener, this)
         Bukkit.getPluginManager().registerEvents(TabSuggestionListener, this)
         Bukkit.getPluginManager().registerEvents(WhitelistListener, this)
+        Bukkit.getPluginManager().registerEvents(AsyncChatListener, this)
 
         WarpConfigManager.loadAll()
     }
