@@ -14,7 +14,7 @@ object ServerlistPingListener : Listener {
         event.motd(
             miniMessage.deserialize(
                 "                   <red>ᴀ ᴘʀɪᴠᴀᴛᴇ ѕᴇʀᴠᴇʀ\n" +
-                        "             <gray>Running creative v${plugin.description.version} - [${COLOR}${Bukkit.getMinecraftVersion()}<gray>]"
+                        "             <white>Running creative v${plugin.description.version} - [${COLOR}${Bukkit.getMinecraftVersion()}<white>]"
             )
         )
 
