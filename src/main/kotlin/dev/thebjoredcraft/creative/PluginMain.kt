@@ -5,8 +5,8 @@ import dev.thebjoredcraft.creative.command.ClearCommand
 import dev.thebjoredcraft.creative.command.GameModeCommand
 import dev.thebjoredcraft.creative.listener.BlockUpdateListener
 import dev.thebjoredcraft.creative.listener.TabSuggestionListener
+import dev.thebjoredcraft.creative.listener.WhitelistListener
 import dev.thebjoredcraft.creative.warps.config.WarpConfigManager
-import dev.thebjoredcraft.creative.whitelist.WhitelistListener
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 

@@ -1,4 +1,4 @@
-package dev.thebjoredcraft.creative.whitelist
+package dev.thebjoredcraft.creative.listener
 
 import com.destroystokyo.paper.event.profile.ProfileWhitelistVerifyEvent
 import net.kyori.adventure.text.Component
