@@ -3,9 +3,11 @@ package dev.thebjoredcraft.creative.warps
 import com.mojang.brigadier.arguments.StringArgumentType
 import dev.thebjoredcraft.creative.COLOR
 import dev.thebjoredcraft.creative.PREFIX
+import dev.thebjoredcraft.creative.miniMessage
 import dev.thebjoredcraft.creative.plugin
 import io.papermc.paper.command.brigadier.Commands
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
+import net.kyori.adventure.sound.Sound
 import org.bukkit.entity.Player
 
 object WarpCommand {
@@ -105,10 +107,16 @@ object WarpCommand {
                                     return@executes 1
                                 }
 
-                                it.source.sender.sendRichMessage("$PREFIX Teleporting to warp $COLOR$name<white>...")
+                                it.source.sender.sendActionBar(miniMessage.deserialize("$PREFIX Teleporting to warp $COLOR$name<white>..."))
 
                                 player.teleportAsync(warp.location).thenRun {
                                     it.source.sender.sendRichMessage("$PREFIX Teleported to warp $COLOR$name<white>.")
+                                    it.source.sender.playSound(
+                                        Sound.sound(
+                                            org.bukkit.Sound.ENTITY_ENDERMAN_TELEPORT,
+                                            Sound.Source.MASTER, 1f, 1f
+                                        ), Sound.Emitter.self()
+                                    )
                                 }
                                 1
                             })
