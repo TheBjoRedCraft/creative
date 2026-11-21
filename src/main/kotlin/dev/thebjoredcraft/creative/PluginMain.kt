@@ -6,6 +6,8 @@ import dev.thebjoredcraft.creative.command.GameModeCommand
 import dev.thebjoredcraft.creative.listener.*
 import dev.thebjoredcraft.creative.warps.WarpCommand
 import dev.thebjoredcraft.creative.warps.config.WarpConfigManager
+import dev.thebjoredcraft.creative.world.generator.GeneratorRegistry
+import dev.thebjoredcraft.creative.world.generator.command.GeneratorCommand
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
@@ -23,6 +25,7 @@ class PluginMain : SuspendingJavaPlugin() {
         GameModeCommand.register()
         ClearCommand.register()
         WarpCommand.register()
+        GeneratorCommand.register()
 
         Bukkit.getPluginManager().registerEvents(BlockUpdateListener, this)
         Bukkit.getPluginManager().registerEvents(TabSuggestionListener, this)
@@ -31,6 +34,7 @@ class PluginMain : SuspendingJavaPlugin() {
         Bukkit.getPluginManager().registerEvents(ServerlistPingListener, this)
 
         WarpConfigManager.loadAll()
+        GeneratorRegistry.registerAll()
 
         if (!Bukkit.getServer().hideOnlinePlayers) {
             plugin.logger.warning("Due to privacy reasons, its highly recommended to enable the 'hide-online-players' option in the server.properties file.")
