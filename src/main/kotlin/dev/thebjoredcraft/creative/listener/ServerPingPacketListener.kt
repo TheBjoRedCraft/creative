@@ -18,7 +18,6 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Bukkit
 
 object ServerPingPacketListener : PacketListenerAbstract() {
-
     override fun onPacketSend(event: PacketSendEvent) {
         when (event.packetType) {
             PacketType.Configuration.Server.PLUGIN_MESSAGE -> {
