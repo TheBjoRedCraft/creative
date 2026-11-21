@@ -3,6 +3,7 @@ package dev.thebjoredcraft.creative
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.thebjoredcraft.creative.command.ClearCommand
 import dev.thebjoredcraft.creative.command.GameModeCommand
+import dev.thebjoredcraft.creative.command.SpeedCommand
 import dev.thebjoredcraft.creative.listener.*
 import dev.thebjoredcraft.creative.warps.WarpCommand
 import dev.thebjoredcraft.creative.warps.config.WarpConfigManager
@@ -27,6 +28,7 @@ class PluginMain : SuspendingJavaPlugin() {
         ClearCommand.register()
         WarpCommand.register()
         GeneratorCommand.register()
+        SpeedCommand.register()
 
         Bukkit.getPluginManager().registerEvents(BlockUpdateListener, this)
         Bukkit.getPluginManager().registerEvents(TabSuggestionListener, this)
