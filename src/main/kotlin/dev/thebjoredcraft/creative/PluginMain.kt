@@ -3,10 +3,7 @@ package dev.thebjoredcraft.creative
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.thebjoredcraft.creative.command.ClearCommand
 import dev.thebjoredcraft.creative.command.GameModeCommand
-import dev.thebjoredcraft.creative.listener.AsyncChatListener
-import dev.thebjoredcraft.creative.listener.BlockUpdateListener
-import dev.thebjoredcraft.creative.listener.TabSuggestionListener
-import dev.thebjoredcraft.creative.listener.WhitelistListener
+import dev.thebjoredcraft.creative.listener.*
 import dev.thebjoredcraft.creative.warps.WarpCommand
 import dev.thebjoredcraft.creative.warps.config.WarpConfigManager
 import net.kyori.adventure.text.format.TextColor
@@ -31,8 +28,13 @@ class PluginMain : SuspendingJavaPlugin() {
         Bukkit.getPluginManager().registerEvents(TabSuggestionListener, this)
         Bukkit.getPluginManager().registerEvents(WhitelistListener, this)
         Bukkit.getPluginManager().registerEvents(AsyncChatListener, this)
+        Bukkit.getPluginManager().registerEvents(ServerlistPingListener, this)
 
         WarpConfigManager.loadAll()
+
+        if (!Bukkit.getServer().hideOnlinePlayers) {
+            plugin.logger.warning("Due to privacy reasons, its highly recommended to enable the 'Hide Online Players' option in the server.properties file.")
+        }
     }
 
     override suspend fun onDisableAsync() {
