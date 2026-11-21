@@ -35,10 +35,9 @@ class PluginMain : SuspendingJavaPlugin() {
         Bukkit.getPluginManager().registerEvents(TabSuggestionListener, this)
         Bukkit.getPluginManager().registerEvents(WhitelistListener, this)
         Bukkit.getPluginManager().registerEvents(AsyncChatListener, this)
-        Bukkit.getPluginManager().registerEvents(ServerlistPingListener, this)
         Bukkit.getPluginManager().registerEvents(ServerLoadListener, this)
 
-        PacketEvents.getAPI().eventManager.registerListener(BrandPacketListener)
+        PacketEvents.getAPI().eventManager.registerListener(ServerPingPacketListener)
 
         GeneratorRegistry.registerAll()
 
