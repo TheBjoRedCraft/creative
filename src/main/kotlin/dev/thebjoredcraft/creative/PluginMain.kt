@@ -6,6 +6,7 @@ import dev.thebjoredcraft.creative.command.GameModeCommand
 import dev.thebjoredcraft.creative.listener.BlockUpdateListener
 import dev.thebjoredcraft.creative.listener.TabSuggestionListener
 import dev.thebjoredcraft.creative.warps.config.WarpConfigManager
+import dev.thebjoredcraft.creative.whitelist.WhitelistListener
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -20,6 +21,7 @@ class PluginMain : SuspendingJavaPlugin() {
 
         Bukkit.getPluginManager().registerEvents(BlockUpdateListener, this)
         Bukkit.getPluginManager().registerEvents(TabSuggestionListener, this)
+        Bukkit.getPluginManager().registerEvents(WhitelistListener, this)
 
         WarpConfigManager.loadAll()
     }
