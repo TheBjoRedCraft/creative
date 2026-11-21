@@ -1,3 +1,5 @@
+import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
+
 plugins {
     kotlin("jvm") version "2.4.20"
     kotlin("plugin.serialization") version "2.4.10"
@@ -48,5 +50,6 @@ paper {
     apiVersion = "1.21"
     foliaSupported = true
 
+    load = BukkitPluginDescription.PluginLoadOrder.STARTUP
     authors = listOf("TheBjoRedCraft")
 }

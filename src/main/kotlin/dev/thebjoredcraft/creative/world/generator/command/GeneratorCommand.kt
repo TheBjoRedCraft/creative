@@ -1,6 +1,7 @@
 package dev.thebjoredcraft.creative.world.generator.command
 
 import com.mojang.brigadier.arguments.StringArgumentType
+import dev.thebjoredcraft.creative.PREFIX
 import dev.thebjoredcraft.creative.plugin
 import dev.thebjoredcraft.creative.world.generator.GeneratorRegistry
 import io.papermc.paper.command.brigadier.Commands
@@ -17,6 +18,14 @@ object GeneratorCommand {
                     .requires { it.sender.hasPermission("creative.setworldgenerator") }
                     .then(
                         Commands.argument("worldname", StringArgumentType.word())
+                            .suggests { context, builder ->
+                                plugin.server.worlds.map { world -> world.name }
+                                    .forEach { worldName ->
+                                        builder.suggest(worldName)
+                                    }
+
+                                builder.buildFuture()
+                            }
                             .then(
                                 Commands.argument("generator", StringArgumentType.word())
                                     .suggests { _, builder ->
@@ -35,13 +44,13 @@ object GeneratorCommand {
                                         val generator = GeneratorRegistry.byName(generatorName)
 
                                         if (generator == null) {
-                                            it.source.sender.sendRichMessage("<red>Generator '$generatorName' not found.")
+                                            it.source.sender.sendRichMessage("$PREFIX <red>Generator '$generatorName' not found.")
                                             return@executes 1
                                         }
 
                                         applyGenerator(worldName, generator)
 
-                                        it.source.sender.sendRichMessage("<green>Set world generator for world '${worldName}' to '$generatorName'.")
+                                        it.source.sender.sendRichMessage("$PREFIX Set world generator for world '${worldName}' to '$generatorName'.")
                                         1
                                     })
                     )
@@ -51,9 +60,8 @@ object GeneratorCommand {
 
 
     private fun applyGenerator(worldName: String, generator: ChunkGenerator) {
-        val worldContainer = plugin.server.worldContainer
-        val bukkitYmlFile = worldContainer.parentFile?.let { File(it, "bukkit.yml") }
-            ?: File(worldContainer.absolutePath, "../bukkit.yml").canonicalFile
+        val rootDir = plugin.server.pluginsFolder.parentFile
+        val bukkitYmlFile = File(rootDir, "bukkit.yml")
 
         if (!bukkitYmlFile.exists()) {
             bukkitYmlFile.createNewFile()

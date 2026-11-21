@@ -8,6 +8,7 @@ import dev.thebjoredcraft.creative.warps.WarpCommand
 import dev.thebjoredcraft.creative.warps.config.WarpConfigManager
 import dev.thebjoredcraft.creative.world.generator.GeneratorRegistry
 import dev.thebjoredcraft.creative.world.generator.command.GeneratorCommand
+import dev.thebjoredcraft.creative.world.generator.impl.GrayWorldGenerator
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
@@ -32,8 +33,8 @@ class PluginMain : SuspendingJavaPlugin() {
         Bukkit.getPluginManager().registerEvents(WhitelistListener, this)
         Bukkit.getPluginManager().registerEvents(AsyncChatListener, this)
         Bukkit.getPluginManager().registerEvents(ServerlistPingListener, this)
+        Bukkit.getPluginManager().registerEvents(ServerLoadListener, this)
 
-        WarpConfigManager.loadAll()
         GeneratorRegistry.registerAll()
 
         if (!Bukkit.getServer().hideOnlinePlayers) {
@@ -41,7 +42,13 @@ class PluginMain : SuspendingJavaPlugin() {
         }
     }
 
+    suspend fun afterEnableAsync() {
+        WarpConfigManager.loadAll()
+    }
+
     override suspend fun onDisableAsync() {
         WarpConfigManager.saveAll(true)
     }
+
+    override fun getDefaultWorldGenerator(worldName: String, id: String?) = GrayWorldGenerator
 }
