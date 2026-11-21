@@ -33,7 +33,7 @@ class PluginMain : SuspendingJavaPlugin() {
         WarpConfigManager.loadAll()
 
         if (!Bukkit.getServer().hideOnlinePlayers) {
-            plugin.logger.warning("Due to privacy reasons, its highly recommended to enable the 'Hide Online Players' option in the server.properties file.")
+            plugin.logger.warning("Due to privacy reasons, its highly recommended to enable the 'hide-online-players' option in the server.properties file.")
         }
     }
 
