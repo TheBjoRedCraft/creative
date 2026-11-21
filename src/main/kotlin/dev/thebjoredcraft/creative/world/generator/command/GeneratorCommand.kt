@@ -4,9 +4,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import dev.thebjoredcraft.creative.plugin
 import dev.thebjoredcraft.creative.world.generator.GeneratorRegistry
 import io.papermc.paper.command.brigadier.Commands
-import io.papermc.paper.command.brigadier.argument.ArgumentTypes
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
-import org.bukkit.World
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.generator.ChunkGenerator
 import java.io.File
@@ -18,7 +16,7 @@ object GeneratorCommand {
                 Commands.literal("setworldgenerator")
                     .requires { it.sender.hasPermission("creative.setworldgenerator") }
                     .then(
-                        Commands.argument("world", ArgumentTypes.world())
+                        Commands.argument("worldname", StringArgumentType.word())
                             .then(
                                 Commands.argument("generator", StringArgumentType.word())
                                     .suggests { _, builder ->
@@ -29,8 +27,8 @@ object GeneratorCommand {
 
                                         builder.buildFuture()
                                     }.executes {
-                                        val world =
-                                            it.getArgument("world", World::class.java)
+                                        val worldName =
+                                            it.getArgument("worldname", String::class.java)
                                         val generatorName =
                                             it.getArgument("generator", String::class.java)
 
@@ -41,9 +39,9 @@ object GeneratorCommand {
                                             return@executes 1
                                         }
 
-                                        applyGenerator(world, generator)
+                                        applyGenerator(worldName, generator)
 
-                                        it.source.sender.sendRichMessage("<green>Set world generator for world '${world.name}' to '$generatorName'.")
+                                        it.source.sender.sendRichMessage("<green>Set world generator for world '${worldName}' to '$generatorName'.")
                                         1
                                     })
                     )
@@ -52,7 +50,7 @@ object GeneratorCommand {
         }
 
 
-    private fun applyGenerator(world: World, generator: ChunkGenerator) {
+    private fun applyGenerator(worldName: String, generator: ChunkGenerator) {
         val worldContainer = plugin.server.worldContainer
         val bukkitYmlFile = worldContainer.parentFile?.let { File(it, "bukkit.yml") }
             ?: File(worldContainer.absolutePath, "../bukkit.yml").canonicalFile
@@ -64,7 +62,7 @@ object GeneratorCommand {
         val config = YamlConfiguration.loadConfiguration(bukkitYmlFile)
 
         config.set(
-            "worlds.${world.name}.generator",
+            "worlds.${worldName}.generator",
             "${plugin.name}:${generator.javaClass.simpleName}"
         )
         config.save(bukkitYmlFile)
