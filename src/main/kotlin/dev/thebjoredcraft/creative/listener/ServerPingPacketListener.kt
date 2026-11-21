@@ -9,9 +9,11 @@ import com.github.retrooper.packetevents.wrapper.PacketWrapper
 import com.github.retrooper.packetevents.wrapper.configuration.server.WrapperConfigServerPluginMessage
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPluginMessage
 import com.github.retrooper.packetevents.wrapper.status.server.WrapperStatusServerResponse
+import com.google.gson.JsonObject
 import dev.thebjoredcraft.creative.COLOR
 import dev.thebjoredcraft.creative.miniMessage
 import dev.thebjoredcraft.creative.plugin
+import io.github.retrooper.packetevents.adventure.serializer.gson.GsonComponentSerializer
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Bukkit
 
@@ -42,15 +44,24 @@ object ServerPingPacketListener : PacketListenerAbstract() {
             PacketType.Status.Server.RESPONSE -> {
                 val packet = WrapperStatusServerResponse(event)
                 val component = packet.component
-                val version = component.getAsJsonObject("version") ?: return
-                val description = component.getAsJsonObject("description") ?: return
-                val players = component.getAsJsonObject("players") ?: return
+
+                val version = component.get("version")?.takeIf { it.isJsonObject }?.asJsonObject
+                    ?: JsonObject()
+                val players = component.get("players")?.takeIf { it.isJsonObject }?.asJsonObject
+                    ?: JsonObject()
 
                 version.addProperty("name", brandString)
-                description.addProperty("text", motdString)
-                players.addProperty("max", 500)
-                packet.component = component
 
+                players.addProperty("max", 500)
+
+                component.add("version", version)
+                component.add("players", players)
+                component.add(
+                    "description",
+                    GsonComponentSerializer.gson().serializeToTree(motdComponent)
+                )
+
+                packet.component = component
                 event.markForReEncode(true)
             }
 
@@ -81,12 +92,10 @@ object ServerPingPacketListener : PacketListenerAbstract() {
         )
     }
 
-    private val motdString by lazy {
-        LegacyComponentSerializer.legacySection().serialize(
-            miniMessage.deserialize(
-                "                   <red>ᴀ ᴘʀɪᴠᴀᴛᴇ ѕᴇʀᴠᴇʀ\n" +
-                        "             <white>Running creative v${plugin.description.version} - [${COLOR}${Bukkit.getMinecraftVersion()}<white>]"
-            )
+    private val motdComponent by lazy {
+        miniMessage.deserialize(
+            "                   <red>ᴀ ᴘʀɪᴠᴀᴛᴇ ѕᴇʀᴠᴇʀ\n" +
+                    "             <white>Running creative v${plugin.description.version} - [${COLOR}${Bukkit.getMinecraftVersion()}<white>]"
         )
     }
 }
