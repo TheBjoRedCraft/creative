@@ -1,5 +1,6 @@
 package dev.thebjoredcraft.creative
 
+import com.github.retrooper.packetevents.PacketEvents
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
 import dev.thebjoredcraft.creative.command.ClearCommand
 import dev.thebjoredcraft.creative.command.GameModeCommand
@@ -36,6 +37,8 @@ class PluginMain : SuspendingJavaPlugin() {
         Bukkit.getPluginManager().registerEvents(AsyncChatListener, this)
         Bukkit.getPluginManager().registerEvents(ServerlistPingListener, this)
         Bukkit.getPluginManager().registerEvents(ServerLoadListener, this)
+
+        PacketEvents.getAPI().eventManager.registerListener(BrandPacketListener)
 
         GeneratorRegistry.registerAll()
 

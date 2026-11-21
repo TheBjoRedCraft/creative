@@ -15,11 +15,13 @@ repositories {
     mavenCentral()
     maven("https://jitpack.io/")
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.codemc.io/repository/maven-releases/")
 }
 
 dependencies {
     implementation("com.github.TheBjoRedCraft.railway:railway-config:1.0.9")
     compileOnly("io.papermc.paper:paper-api:26.3.build.201-stable")
+    compileOnly("com.github.retrooper:packetevents-spigot:2.14.0")
 
     implementation("com.github.shynixn.mccoroutine:mccoroutine-folia-api:2.23.0")
     implementation("com.github.shynixn.mccoroutine:mccoroutine-folia-core:2.23.0")
@@ -52,4 +54,9 @@ paper {
 
     load = BukkitPluginDescription.PluginLoadOrder.STARTUP
     authors = listOf("TheBjoRedCraft")
+
+
+    serverDependencies {
+        register("packetevents")
+    }
 }
