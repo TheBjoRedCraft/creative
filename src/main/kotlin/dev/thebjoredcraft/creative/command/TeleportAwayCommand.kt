@@ -1,11 +1,13 @@
 package dev.thebjoredcraft.creative.command
 
+import dev.thebjoredcraft.creative.COLOR
 import dev.thebjoredcraft.creative.PREFIX
 import dev.thebjoredcraft.creative.miniMessage
 import dev.thebjoredcraft.creative.plugin
 import dev.thebjoredcraft.creative.warps.WarpRegistry
 import io.papermc.paper.command.brigadier.Commands
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
+import net.kyori.adventure.sound.Sound
 import org.bukkit.Location
 import org.bukkit.entity.Player
 import kotlin.math.pow
@@ -69,7 +71,7 @@ object TeleportAwayCommand {
                             return@executes 1
                         }
 
-                        player.sendActionBar(miniMessage.deserialize("Finding a destination..."))
+                        player.sendActionBar(miniMessage.deserialize("$COLOR Finding a destination..."))
 
                         world.getChunkAtAsync(
                             target.blockX shr 4,
@@ -90,7 +92,15 @@ object TeleportAwayCommand {
                                     plugin,
                                     {
                                         if (success) {
-                                            player.sendRichMessage("$PREFIX You have been teleported!")
+                                            player.playSound(
+                                                Sound.sound(
+                                                    org.bukkit.Sound.ENTITY_ENDERMAN_TELEPORT,
+                                                    Sound.Source.MASTER,
+                                                    1f,
+                                                    1f
+                                                ), Sound.Emitter.self()
+                                            )
+                                            player.sendRichMessage("$PREFIX You have been teleported! <red><click:run_command:'/teleport ${currentLocation.x.toInt()} ${currentLocation.y.toInt()} ${currentLocation.z.toInt()}'>Back?</click></red> ")
                                         } else {
                                             player.sendRichMessage("$PREFIX <red>Teleportation failed.")
                                         }
