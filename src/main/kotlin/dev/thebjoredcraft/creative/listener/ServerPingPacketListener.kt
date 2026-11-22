@@ -14,7 +14,6 @@ import dev.thebjoredcraft.creative.COLOR
 import dev.thebjoredcraft.creative.miniMessage
 import dev.thebjoredcraft.creative.plugin
 import io.github.retrooper.packetevents.adventure.serializer.gson.GsonComponentSerializer
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.Bukkit
 
 object ServerPingPacketListener : PacketListenerAbstract() {
@@ -49,7 +48,8 @@ object ServerPingPacketListener : PacketListenerAbstract() {
                 val players = component.get("players")?.takeIf { it.isJsonObject }?.asJsonObject
                     ?: JsonObject()
 
-                version.addProperty("name", brandString)
+                version.addProperty("name", "ᴀᴄᴄᴇѕѕ ᴘʀᴏʜɪʙɪᴛᴇᴅ")
+                version.addProperty("protocol", 0)
 
                 players.addProperty("max", 500)
 
@@ -84,11 +84,7 @@ object ServerPingPacketListener : PacketListenerAbstract() {
     }
 
     private val brandString by lazy {
-        LegacyComponentSerializer.legacySection().serialize(
-            miniMessage.deserialize(
-                "${COLOR}Creative v${plugin.description.version} @MCv${Bukkit.getMinecraftVersion()}<reset>"
-            )
-        )
+        "Creative v${plugin.description.version} (${Bukkit.getMinecraftVersion()})"
     }
 
     private val motdComponent by lazy {
